@@ -1,6 +1,1 @@
-javabayes
-=========
-
-JavaBayes upgraded to Java 6
-
-This upgrade is still a work in progress....
+A README for this overall project - adding logical statements to a BN
