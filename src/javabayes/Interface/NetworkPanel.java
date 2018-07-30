@@ -680,4 +680,13 @@ public class NetworkPanel extends Canvas {
 		d.show();
 	}
 
+	/**
+	 *
+	 */
+	void supplement_network() {
+		ig.reset_marginal();
+		Dialog d = new SupplementNetworkDialog(frame, ig);
+		d.show();
+	}
+
 }

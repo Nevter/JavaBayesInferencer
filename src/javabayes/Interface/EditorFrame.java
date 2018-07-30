@@ -75,6 +75,7 @@ public class EditorFrame extends Frame {
 	public static final String editVariableLabel = "Edit Variable";
 	public static final String editFunctionLabel = "Edit Function";
 	public static final String editNetworkLabel = "Edit Network";
+	public static final String supplementLabel = "Supplement";
 
 	/**
 	 * Default constructor for an EditorFrame.
@@ -93,6 +94,7 @@ public class EditorFrame extends Frame {
 		cmdPanel.add(new Button(deleteLabel));
 		cmdPanel.add(new Button(queryLabel));
 		cmdPanel.add(new Button(observeLabel));
+		cmdPanel.add(new Button(supplementLabel));
 
 		editPanel = new Panel();
 		editPanel.setLayout(new GridLayout(1, 3));
@@ -133,29 +135,31 @@ public class EditorFrame extends Frame {
 		if (evt.target instanceof Button) {
 			String label = ((Button) (evt.target)).getLabel();
 
-			if (((String) arg).equals(createLabel)) {
+			if ((arg).equals(createLabel)) {
 				scrollPanel.netPanel.set_mode(label);
 				JavaBayesHelpMessages
 						.show(JavaBayesHelpMessages.create_message);
 				setCursor(Frame.DEFAULT_CURSOR);
-			} else if (((String) arg).equals(moveLabel)) {
+			} else if ((arg).equals(moveLabel)) {
 				scrollPanel.netPanel.set_mode(label);
 				JavaBayesHelpMessages.show(JavaBayesHelpMessages.move_message);
 				setCursor(Frame.MOVE_CURSOR);
-			} else if (((String) arg).equals(deleteLabel)) {
+			} else if ((arg).equals(deleteLabel)) {
 				scrollPanel.netPanel.set_mode(label);
 				JavaBayesHelpMessages
 						.show(JavaBayesHelpMessages.delete_message);
 				setCursor(Frame.HAND_CURSOR);
-			} else if (((String) arg).equals(queryLabel)) {
+			} else if ((arg).equals(queryLabel)) {
 				set_query_mode();
-			} else if (((String) arg).equals(observeLabel)) {
+			} else if ((arg).equals(observeLabel)) {
 				set_observe_mode();
-			} else if (((String) arg).equals(editVariableLabel)) {
+			} else if ( (arg).equals(supplementLabel)) {
+				set_supplement_mode();
+			} else if ((arg).equals(editVariableLabel)) {
 				set_edit_variable_mode();
-			} else if (((String) arg).equals(editFunctionLabel)) {
+			} else if ((arg).equals(editFunctionLabel)) {
 				set_edit_function_mode();
-			} else if (((String) arg).equals(editNetworkLabel)) {
+			} else if ((arg).equals(editNetworkLabel)) {
 				set_edit_network_mode();
 			}
 		}
@@ -390,6 +394,14 @@ public class EditorFrame extends Frame {
 		scrollPanel.netPanel.set_mode(observeLabel);
 		JavaBayesHelpMessages.show(JavaBayesHelpMessages.observe_message);
 	}
+
+    /**
+     * Supplement the network with a propositional statement
+     */
+    public void set_supplement_mode() {
+        scrollPanel.netPanel.supplement_network();
+        scrollPanel.netPanel.repaint();
+    }
 
 	/**
 	 * Interact with menu options: edit variable.

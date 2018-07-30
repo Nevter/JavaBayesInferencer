@@ -75,7 +75,7 @@ public class JavaBayes extends Applet {
 	private void construct(boolean ia) {
 		is_applet = ia;
 
-		editorFrame = new EditorFrame(this, "JavaBayes Editor");
+		editorFrame = new EditorFrame(this, "JavaBayesInferencer Editor");
 		editorFrame.show();
 		consoleFrame = new JavaBayesConsoleFrame(this, "JavaBayes Console");
 		consoleFrame.show();
