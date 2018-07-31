@@ -152,23 +152,35 @@ class SupplementNetworkDialog extends Dialog {
             return;
         }
 
-        /*
-        int relationship = ig.get_relationship(antecedentNode, consequentNode);
+        InferenceGraph.Relation relationship = ig.get_relationship(antecedentNode, consequentNode);
 
-        if (relationship == InferenceGraph.RELATION_SELF){
-            //print error to console
+        if (relationship == InferenceGraph.Relation.Self){
             System.out.println("The two nodes are the same!");
-            return;
         }
-        */
+        else if (relationship == InferenceGraph.Relation.Parent){
+            System.out.println(antecedentName + " is a parent of " + consequentName);
+        }
+        else if (relationship == InferenceGraph.Relation.Child){
+            System.out.println(antecedentName + " is a child of " + consequentName);
+        }
+        else if (relationship == InferenceGraph.Relation.GrandParent){
+            System.out.println(antecedentName + " is a grandparent of " + consequentName);
+        }
+        else if (relationship == InferenceGraph.Relation.Grandchild){
+            System.out.println(antecedentName + " is a grandchild of " + consequentName);
+        }
+        else if (relationship == InferenceGraph.Relation.Unrelated){
+            System.out.println(antecedentName + " has no relation to " + consequentName);
+            System.out.println("creating arc");
+            ig.create_arc(antecedentNode, consequentNode);
+        }
 
         /**
          * TODO:
          * check if  there is already a relationship? - Algorithm dependent
          * draw an arc between the two nodes depending on the operator.
          */
-        System.out.println("creating arc");
-        ig.create_arc(antecedentNode, consequentNode);
+
 
     }
 

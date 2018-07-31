@@ -30,9 +30,7 @@ import java.awt.Point;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.URL;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Vector;
+import java.util.*;
 
 import javabayes.BayesianInferences.Explanation;
 import javabayes.BayesianNetworks.BayesNet;
@@ -73,6 +71,8 @@ public class InferenceGraph {
 	public final static int EXPLANATION = 3;
 	public final static int FULL_EXPLANATION = 4;
 	public final static int SENSITIVITY_ANALYSIS = 5;
+
+	public enum Relation { Child, Grandchild, Parent, GrandParent, Self, Unrelated}
 
 	public final static int NO_CREDAL_SET = QuasiBayesNet.NO_CREDAL_SET;
 	public final static int CONSTANT_DENSITY_RATIO = QuasiBayesNet.CONSTANT_DENSITY_RATIO;
@@ -496,6 +496,85 @@ public class InferenceGraph {
 	public int number_nodes() {
 		return (nodes.size());
 	}
+
+
+    /**
+     * Find the relationship from head_node to target_node.
+     * Can be one of 6 options: child, grandchild, parent,
+     * grandparent, unrelated or self.
+     * The relationship is define on the head_node
+     */
+    public Relation get_relationship(InferenceGraphNode head_node,
+                                     InferenceGraphNode target_node) {
+
+        Relation relation = Relation.Unrelated;
+
+        if (head_node.equals(target_node)){
+            relation = Relation.Self;
+            return relation;
+        }
+
+
+        //find any children
+        Iterator target_children = target_node.get_children().iterator();
+        while (target_children.hasNext()){
+            if (head_node.equals(target_children.next())){
+                relation = Relation.Child;
+                return relation;
+            }
+        }
+
+        //find any parents
+        Iterator head_children = head_node.get_children().iterator();
+        while (head_children.hasNext()){
+            if (target_node.equals(head_children.next())){
+                relation = Relation.Parent;
+                return relation;
+            }
+        }
+
+        //find any grandparents
+        Stack head_children_stack = new Stack();
+        head_children_stack.push(head_node);
+        while(!head_children_stack.empty()){
+            //pop off top node, check it and add it's children back to the stack
+            InferenceGraphNode currentNode = (InferenceGraphNode) head_children_stack.pop();
+            //check it
+            if (currentNode.equals(target_node)){
+                relation = Relation.GrandParent;
+                return relation;
+            }
+            //add children back to the stack
+            Iterator children = currentNode.get_children().iterator();
+            while (children.hasNext()){
+                head_children_stack.push(children.next());
+            }
+
+        }
+
+        //find any grandchildren
+        Stack target_children_stack = new Stack();
+        target_children_stack.push(target_node);
+        while(!target_children_stack.empty()){
+            //pop off top node, check it and add it's children back to the stack
+            InferenceGraphNode currentNode = (InferenceGraphNode) target_children_stack.pop();
+            //check it
+            if (currentNode.equals(head_node)){
+                relation = Relation.Grandchild;
+                return relation;
+            }
+            //add children back to the stack
+            Iterator children = currentNode.get_children().iterator();
+            while (children.hasNext()){
+                target_children_stack.push(children.next());
+            }
+
+        }
+
+        return relation;
+    }
+
+
 
 	/**
 	 * Create a new node in the network.
